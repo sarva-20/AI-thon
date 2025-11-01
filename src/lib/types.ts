@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { GenerateSocialMediaPostsOutput } from '@/ai/flows/generate-social-media-posts';
 
 export interface TranscriptSegment {
   speakerId: string;
@@ -14,4 +15,5 @@ export interface Artifact {
   summary: string;
   transcript: TranscriptSegment[];
   emotion?: string;
+  socialMediaPosts?: GenerateSocialMediaPostsOutput;
 }
