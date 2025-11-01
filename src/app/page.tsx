@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -11,6 +12,7 @@ import {
   MessageSquare,
   PanelLeft,
   ChevronsRight,
+  LogIn
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
@@ -32,6 +34,7 @@ import {
 import AppSidebar from '@/components/layout/app-sidebar';
 import Header from '@/components/layout/header';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Link from 'next/link';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -61,7 +64,12 @@ function LandingPage() {
                     <MessageSquare className="h-8 w-8 text-primary" />
                     <h1 className="text-2xl font-bold">Voicepool</h1>
                 </div>
-                <AuthButton />
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" asChild>
+                    <Link href="/login">Sign In</Link>
+                  </Button>
+                  <AuthButton />
+                </div>
             </header>
             <main className="flex-1">
                 <section className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 py-16 md:grid-cols-2 lg:py-24">
@@ -74,8 +82,12 @@ function LandingPage() {
                             Voicepool provides real-time audio rooms with live transcription and intelligent summarization. Capture every detail, effortlessly.
                         </p>
                         <div className="flex items-center gap-4">
+                            <Button asChild size="lg">
+                                <Link href="/signup">
+                                    <LogIn className="mr-2" /> Get Started
+                                </Link>
+                            </Button>
                             <AuthButton />
-                            <Button variant="outline">Learn More</Button>
                         </div>
                     </div>
                     <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-2xl md:h-96">

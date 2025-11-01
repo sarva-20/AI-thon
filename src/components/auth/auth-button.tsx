@@ -1,8 +1,10 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 export function AuthButton() {
   const { signInWithGoogle, loading } = useAuth();
@@ -17,7 +19,7 @@ export function AuthButton() {
   );
   
   return (
-    <Button onClick={signInWithGoogle} disabled={loading} size="lg">
+    <Button onClick={signInWithGoogle} disabled={loading} variant="outline">
       {loading ? (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
