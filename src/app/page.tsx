@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import {
   Mic,
@@ -16,11 +16,10 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { transcribeAudioSegments } from '@/ai/flows/transcribe-audio-segments';
+import { useAudioRecorder } from '@/hooks/use-audio-recorder';
 import { generateArtifactMetadata } from '@/ai/flows/generate-artifact-metadata';
 import { useToast } from '@/hooks/use-toast';
 import { saveArtifact } from '@/lib/firestore';
-import type { TranscriptSegment } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -112,81 +111,16 @@ function LandingPage() {
 function AudioRoom() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [isRecording, setIsRecording] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); // For transcription and summarization
-  const [transcriptSegments, setTranscriptSegments] = useState<TranscriptSegment[]>([]);
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const audioChunks = useRef<Blob[]>([]);
+  const {
+    isRecording,
+    isProcessing,
+    transcriptSegments,
+    setTranscriptSegments,
+    handlePushToTalkStart,
+    handlePushToTalkStop,
+    stopRecording,
+  } = useAudioRecorder(user);
 
-  const stopRecording = useCallback(() => {
-    if (mediaRecorder.current && mediaRecorder.current.state === 'recording') {
-      mediaRecorder.current.stop();
-      setIsRecording(false);
-    }
-  }, []);
-
-  const handlePushToTalkStart = async () => {
-    if (isRecording) return;
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { noiseSuppression: true, echoCancellation: true },
-      });
-      mediaRecorder.current = new MediaRecorder(stream);
-      audioChunks.current = [];
-
-      mediaRecorder.current.ondataavailable = (event) => {
-        audioChunks.current.push(event.data);
-      };
-
-      mediaRecorder.current.onstop = async () => {
-        setIsProcessing(true);
-        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-
-        // Convert blob to base64 data URI
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = async () => {
-          const base64data = reader.result as string;
-          try {
-            const { transcription } = await transcribeAudioSegments({ audioDataUri: base64data });
-            if (transcription && user) {
-              setTranscriptSegments((prev) => [
-                ...prev,
-                { speakerId: user.uid, speakerName: user.displayName || 'User', text: transcription, timestamp: new Date() },
-              ]);
-            }
-          } catch (error) {
-            console.error('Transcription error:', error);
-            toast({
-              variant: 'destructive',
-              title: 'Transcription Failed',
-              description: 'Could not transcribe the audio segment.',
-            });
-          } finally {
-            setIsProcessing(false);
-          }
-        };
-
-        // Clean up stream tracks
-        stream.getTracks().forEach((track) => track.stop());
-      };
-
-      mediaRecorder.current.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Error accessing microphone:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Microphone Error',
-        description: 'Could not access your microphone. Please check permissions.',
-      });
-    }
-  };
-
-  const handlePushToTalkStop = () => {
-    stopRecording();
-  };
 
   const handleEndSession = async () => {
     if (!user || transcriptSegments.length === 0) {
@@ -197,7 +131,6 @@ function AudioRoom() {
       return;
     }
 
-    setIsProcessing(true);
     const fullTranscript = transcriptSegments.map((seg) => seg.text).join('\n');
 
     try {
@@ -222,8 +155,6 @@ function AudioRoom() {
         title: 'Save Failed',
         description: 'There was an error saving your session.',
       });
-    } finally {
-      setIsProcessing(false);
     }
   };
   
