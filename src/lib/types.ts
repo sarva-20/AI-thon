@@ -6,6 +6,7 @@ export interface TranscriptSegment {
   speakerName: string;
   text: string;
   timestamp: Date | Timestamp;
+  audioUrl?: string;
 }
 
 export interface Artifact {
