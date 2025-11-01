@@ -1,4 +1,4 @@
-# Voicepool
+# Voicepod
 
 Voicepool is a modern, AI-powered audio application that transforms real-time conversations into structured, actionable insights. Built with Next.js, Firebase, and Google's Genkit AI framework, it provides a seamless experience for capturing, transcribing, summarizing, and sharing audio content.
 
