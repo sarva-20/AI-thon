@@ -10,7 +10,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Artifact } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
-import { User } from 'lucide-react';
+import { User, Smile, Frown, Meh } from 'lucide-react';
+import { Badge } from '../ui/badge';
 
 interface ArtifactViewDialogProps {
   artifact: Artifact;
@@ -19,6 +20,22 @@ interface ArtifactViewDialogProps {
 }
 
 export default function ArtifactViewDialog({ artifact, isOpen, onOpenChange }: ArtifactViewDialogProps) {
+    const getEmotionIcon = (emotion?: string) => {
+    switch (emotion?.toLowerCase()) {
+      case 'positive':
+      case 'happy':
+      case 'joy':
+        return <Smile className="h-4 w-4 text-green-500" />;
+      case 'negative':
+      case 'sad':
+      case 'angry':
+      case 'concerned':
+        return <Frown className="h-4 w-4 text-red-500" />;
+      default:
+        return <Meh className="h-4 w-4 text-yellow-500" />;
+    }
+  }
+  
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
@@ -33,6 +50,15 @@ export default function ArtifactViewDialog({ artifact, isOpen, onOpenChange }: A
                 <h3 className="text-lg font-semibold mb-2">Summary</h3>
                 <p className="text-sm text-muted-foreground bg-secondary p-4 rounded-md">{artifact.summary}</p>
             </div>
+            {artifact.emotion && (
+                <div>
+                    <h3 className="text-lg font-semibold mb-2">Sentiment</h3>
+                    <Badge variant="outline" className="flex items-center gap-2 w-fit">
+                        {getEmotionIcon(artifact.emotion)}
+                        <span>{artifact.emotion}</span>
+                    </Badge>
+                </div>
+            )}
             <Separator />
             <div>
                  <h3 className="text-lg font-semibold mb-2">Full Transcript</h3>

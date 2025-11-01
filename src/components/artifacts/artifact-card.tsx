@@ -8,6 +8,8 @@ import type { Artifact } from '@/lib/types';
 import ArtifactViewDialog from './artifact-view-dialog';
 import { Timestamp } from 'firebase/firestore';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Badge } from '@/components/ui/badge';
+import { Smile, Frown, Meh } from 'lucide-react';
 
 interface ArtifactCardProps {
   artifact: Artifact;
@@ -26,6 +28,22 @@ export default function ArtifactCard({ artifact }: ArtifactCardProps) {
       day: 'numeric',
     });
   };
+
+  const getEmotionIcon = (emotion?: string) => {
+    switch (emotion?.toLowerCase()) {
+      case 'positive':
+      case 'happy':
+      case 'joy':
+        return <Smile className="h-4 w-4 text-green-500" />;
+      case 'negative':
+      case 'sad':
+      case 'angry':
+      case 'concerned':
+        return <Frown className="h-4 w-4 text-red-500" />;
+      default:
+        return <Meh className="h-4 w-4 text-yellow-500" />;
+    }
+  }
 
   return (
     <>
@@ -52,6 +70,12 @@ export default function ArtifactCard({ artifact }: ArtifactCardProps) {
           </CardDescription>
         </CardContent>
         <CardFooter className="flex flex-col items-start gap-4">
+            {artifact.emotion && (
+              <Badge variant="outline" className="flex items-center gap-2">
+                {getEmotionIcon(artifact.emotion)}
+                <span>{artifact.emotion}</span>
+              </Badge>
+            )}
             <p className="text-sm text-muted-foreground">
                 Recorded on {formatDate(artifact.createdAt)}
             </p>

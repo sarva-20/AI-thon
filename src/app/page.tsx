@@ -134,11 +134,12 @@ function AudioRoom() {
     const fullTranscript = transcriptSegments.map((seg) => seg.text).join('\n');
 
     try {
-      const { summary } = await generateArtifactMetadata({ transcript: fullTranscript });
+      const { summary, emotion } = await generateArtifactMetadata({ transcript: fullTranscript });
       const artifact = {
         userId: user.uid,
         transcript: transcriptSegments,
         summary: summary,
+        emotion: emotion,
       };
 
       await saveArtifact(user.uid, artifact);
@@ -233,14 +234,13 @@ function AudioRoom() {
               <Button
                 onClick={handleEndSession}
                 disabled={isProcessing || transcriptSegments.length === 0}
-                variant="outline"
               >
                 {isProcessing ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <Save className="mr-2 h-4 w-4" />
                 )}
-                End & Save Session
+                Finish & Save Session
               </Button>
             </div>
           </footer>

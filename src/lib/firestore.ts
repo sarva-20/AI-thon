@@ -34,7 +34,7 @@ export const createUserProfile = async (user: FirebaseUser) => {
   }
 };
 
-export const saveArtifact = async (userId: string, artifact: Omit<Artifact, 'id'>) => {
+export const saveArtifact = async (userId: string, artifact: Omit<Artifact, 'id' | 'createdAt'>) => {
     try {
         const artifactsCollectionRef = collection(db, 'users', userId, 'artifacts');
         await addDoc(artifactsCollectionRef, {

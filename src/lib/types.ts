@@ -13,4 +13,5 @@ export interface Artifact {
   createdAt: Date | Timestamp;
   summary: string;
   transcript: TranscriptSegment[];
+  emotion?: string;
 }
