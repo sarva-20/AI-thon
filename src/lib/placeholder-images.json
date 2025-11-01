@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "Abstract sound waves on a dark background",
+      "imageUrl": "https://images.unsplash.com/photo-1704643770744-154e115d454d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzb3VuZCUyMHdhdmVzfGVufDB8fHx8MTc2MTkyNTY4OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sound waves"
+    },
+    {
+      "id": "artifact-placeholder",
+      "description": "Abstract representation of data or text",
+      "imageUrl": "https://images.unsplash.com/photo-1480944657103-7fed22359e1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkYXRhJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzYxOTMzODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "data abstract"
+    }
+  ]
 }
