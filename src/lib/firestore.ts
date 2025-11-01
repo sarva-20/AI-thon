@@ -34,12 +34,12 @@ export const createUserProfile = async (user: FirebaseUser) => {
   }
 };
 
-export const saveArtifact = async (userId: string, artifact: Omit<Artifact, 'id' | 'createdAt'> & { createdAt: Date }) => {
+export const saveArtifact = async (userId: string, artifact: Omit<Artifact, 'id'>) => {
     try {
         const artifactsCollectionRef = collection(db, 'users', userId, 'artifacts');
         await addDoc(artifactsCollectionRef, {
             ...artifact,
-            createdAt: Timestamp.fromDate(artifact.createdAt),
+            createdAt: serverTimestamp(),
         });
     } catch (error) {
         console.error("Error saving artifact: ", error);

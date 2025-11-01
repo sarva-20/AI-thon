@@ -192,7 +192,6 @@ function AudioRoom() {
       const { summary } = await generateArtifactMetadata({ transcript: fullTranscript });
       const artifact = {
         userId: user.uid,
-        createdAt: new Date(),
         transcript: transcriptSegments,
         summary: summary,
       };

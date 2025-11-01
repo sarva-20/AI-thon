@@ -9,21 +9,13 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 let app;
 if (!getApps().length) {
-    try {
-        app = initializeApp(firebaseConfig);
-    } catch (e) {
-        console.error("Firebase initialization error", e);
-        // Add a check for a specific error if you want to handle it differently
-        if (!/already exists/.test((e as Error).message)) {
-            throw e;
-        }
-        app = getApp(); // if it already exists, get the app
-    }
+    app = initializeApp(firebaseConfig);
 } else {
     app = getApp();
 }
