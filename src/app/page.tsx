@@ -61,7 +61,7 @@ function LandingPage() {
             <header className="container mx-auto flex h-20 items-center justify-between px-4">
                 <div className="flex items-center gap-2">
                     <MessageSquare className="h-8 w-8 text-primary" />
-                    <h1 className="text-2xl font-bold">Voicepool</h1>
+                    <h1 className="text-2xl font-bold">Voicepod</h1>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" asChild>
